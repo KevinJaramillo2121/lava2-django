@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Bienvenido, {{ user.nombre_completo }}</h1>
+    <p>Desde aquí puedes agendar nuevos lavados y ver el historial de tus vehículos.</p>
+</div>
+{% endblock %}

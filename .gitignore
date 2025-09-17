@@ -1,0 +1,74 @@
+# ==============================================================================
+# 1. ENTORNO VIRTUAL
+# Nunca se debe subir la carpeta del entorno virtual. Contiene paquetes que
+# se reinstalan usando el archivo `requirements.txt`.
+# ==============================================================================
+.venv/
+venv/
+env/
+
+
+# ==============================================================================
+# 2. ARCHIVOS DE PYTHON COMPILADOS Y CACHÉ
+# Son generados automáticamente por Python y no son necesarios en el repo.
+# ==============================================================================
+__pycache__/
+*.pyc
+
+
+# ==============================================================================
+# 3. VARIABLES DE ENTORNO Y CONFIGURACIONES LOCALES (¡IMPORTANTE!)
+# Contienen secretos como la SECRET_KEY y credenciales de la base de datos.
+# ¡Nunca deben estar en el repositorio!
+# ==============================================================================
+.env
+local_settings.py
+
+
+# ==============================================================================
+# 4. BASE DE DATOS LOCAL
+# Ignora el archivo de la base de datos de SQLite que se usa para desarrollo.
+# ==============================================================================
+db.sqlite3
+*.sqlite3
+
+
+# ==============================================================================
+# 5. ARCHIVOS DE CONFIGURACIÓN DE IDEs (Editores de Código)
+# Cada desarrollador tiene su propia configuración.
+# ==============================================================================
+.idea/
+.vscode/
+
+
+# ==============================================================================
+# 6. LOGS Y ARCHIVOS TEMPORALES
+# Archivos de registro y otros archivos generados en tiempo de ejecución.
+# ==============================================================================
+*.log
+*.pot
+*.mo
+
+
+core/settings.py
+
+# Entorno Virtual
+venv/
+env/
+.venv/
+
+# Archivos de Python compilados
+__pycache__/
+*.pyc
+
+# Base de datos local
+db.sqlite3
+
+# Archivos de configuración y secretos (MUY IMPORTANTE)
+.env
+# Ya tienes core/settings.py en tu gitignore, si no, añádelo:
+# core/settings.py
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db

@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Lava2{% endblock %}</title>
+    
+    <!-- Enlace a Google Fonts para una tipografía profesional -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Carga de nuestro archivo CSS principal -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- Bloque para estilos adicionales en páginas específicas -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="{% url 'home' %}" class="navbar-brand">Lava2</a>
+            <nav class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <span>Hola, {{ user.nombre_completo|default:user.username }}!</span>
+                    
+                    <!-- CÓDIGO CORREGIDO: Reemplaza el <a> por un <form> -->
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-button">Cerrar Sesión</button>
+                    </form>
+
+                {% else %}
+                    <a href="{% url 'login' %}">Iniciar Sesión</a>
+                    <a href="{% url 'signup' %}">Registrarse</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Bloque para scripts adicionales -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

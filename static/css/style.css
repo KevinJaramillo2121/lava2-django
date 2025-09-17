@@ -1,0 +1,134 @@
+/* Paleta de Colores:
+   Azul Oscuro (para texto y cabeceras): #0A2342
+   Azul Primario (para botones y enlaces): #2C6E9E
+   Azul Claro (para fondos y acentos): #E0E7FF
+   Blanco (para fondos principales): #FFFFFF
+   Gris (para bordes y texto secundario): #CED4DA
+*/
+
+/* --- ESTILOS GENERALES --- */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa; /* Un gris muy claro para el fondo general */
+    color: #343a40; /* Color de texto principal */
+    margin: 0;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* --- BARRA DE NAVEGACIÓN --- */
+.navbar {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0A2342;
+    text-decoration: none;
+}
+
+.navbar-nav a {
+    color: #0A2342;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 400;
+}
+
+.navbar-nav a:hover {
+    color: #2C6E9E;
+}
+
+.navbar-nav span {
+    margin-left: 20px;
+    color: #6c757d;
+}
+
+/* --- ESTILOS DE FORMULARIOS --- */
+main {
+    padding-top: 40px;
+}
+
+h2 {
+    color: #0A2342;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+form {
+    background-color: #FFFFFF;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+form p {
+    margin-bottom: 1.2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: #495057;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2C6E9E;
+    box-shadow: 0 0 0 3px rgba(44, 110, 158, 0.2);
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #2C6E9E;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover {
+    background-color: #0A2342;
+}
+
+.form-errors {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
