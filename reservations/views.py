@@ -1,3 +1,4 @@
+from django.http import JsonResponse 
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -42,4 +43,26 @@ class CrearReservaView(LoginRequiredMixin, CreateView):
         self.object = form.save()
         # Aquí podrías añadir un mensaje de éxito con `django.contrib.messages`
         return redirect(self.get_success_url())
+    
+    
+# --- NUEVA VISTA TIPO API ---
+def get_empleados_por_sede(request):
+    """
+    Devuelve un JSON con los empleados de una sede específica.
+    Esta vista será llamada por JavaScript.
+    """
+    sede_id = request.GET.get('sede_id')
+    empleados = CustomUser.objects.filter(
+        rol='employee', 
+        empleado_profile__sede_id=sede_id
+    ).select_related('empleado_profile')
+    
+    data = [{
+        'id': emp.id, 
+        'nombre': emp.nombre_completo,
+        'experiencia': emp.empleado_profile.experiencia,
+        'calificacion': f"{emp.empleado_profile.calificacion:.2f}"
+    } for emp in empleados]
+    
+    return JsonResponse(data, safe=False)
 

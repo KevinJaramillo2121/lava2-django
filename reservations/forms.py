@@ -1,11 +1,25 @@
 from django import forms
-from .models import Reserva, TipoLavado, Producto
+from .models import Reserva, TipoLavado, Producto, Sede
 from accounts.models import CustomUser
+import datetime
 
 class ReservaForm(forms.ModelForm):
+    sede = forms.ModelChoiceField(
+        queryset=Sede.objects.all(),
+        label="Selecciona una Sede",
+        empty_label="Elige dónde quieres tu lavado"
+    )
+    fecha_cita = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date', 'min': datetime.date.today().isoformat()}),
+        label="Día de la cita"
+    )
+    hora_cita = forms.TimeField(
+        widget=forms.TimeInput(attrs={'type': 'time'}),
+        label="Hora de la cita"
+    )
     # Campo para seleccionar el empleado
     empleado_asignado = forms.ModelChoiceField(
-        queryset=CustomUser.objects.filter(rol='employee', empleado_profile__disponible=True),
+        queryset=CustomUser.objects.none(),
         required=False, # No es obligatorio para permitir la selección automática
         label="Selecciona un empleado",
         empty_label="Selección automática (cualquier empleado disponible)"
@@ -45,7 +59,7 @@ class ReservaForm(forms.ModelForm):
 
     class Meta:
         model = Reserva
-        fields = ['vehiculo', 'tipo_lavado'] # Campos directos del modelo
+        fields = ['vehiculo', 'tipo_lavado', 'sede'] 
         widgets = {
             'tipo_lavado': forms.RadioSelect,
         }
@@ -58,6 +72,29 @@ class ReservaForm(forms.ModelForm):
         # Filtramos el queryset de vehículos para mostrar solo los del cliente actual
         if user:
             self.fields['vehiculo'].queryset = user.vehiculos.all()
+
+        if 'sede' in self.data:
+            try:
+                sede_id = int(self.data.get('sede'))
+                self.fields['empleado_asignado'].queryset = CustomUser.objects.filter(
+                    rol='employee', 
+                    empleado_profile__sede_id=sede_id,
+                    empleado_profile__disponible=True
+                )
+            except (ValueError, TypeError):
+                pass # Si el ID no es válido, el queryset permanece vacío
+        
+        self.productos_fields = ['shampoos', 'ceras', 'siliconas', 'partes_negras', 'cuidado_pintura']
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        fecha = cleaned_data.get("fecha_cita")
+        hora = cleaned_data.get("hora_cita")
+
+        if fecha and hora:
+            cleaned_data['fecha_hora_cita'] = datetime.datetime.combine(fecha, hora)
+        
+        return cleaned_data
         
         # Juntamos todos los campos de productos en uno solo para validación
         self.productos_fields = ['shampoos', 'ceras', 'siliconas', 'partes_negras', 'cuidado_pintura']
@@ -71,6 +108,8 @@ class ReservaForm(forms.ModelForm):
         # Creamos la instancia de la reserva sin guardarla aun
         reserva = super().save(commit=False)
         
+        reserva.fecha_hora_cita = self.cleaned_data['fecha_hora_cita']
+
         # Calculamos el precio total
         reserva.precio_total = reserva.tipo_lavado.precio
         

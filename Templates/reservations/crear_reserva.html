@@ -5,52 +5,115 @@
 {% block content %}
 <div class="container">
     <h1>Reservar Lavado</h1>
-    <form method="post">
+    <form method="post" id="reserva-form">
         {% csrf_token %}
 
-        <h2>1. Selecciona tu Vehículo</h2>
+        <h2>1. Elige la Sede y la Fecha</h2>
+        {{ form.sede.label_tag }}
+        {{ form.sede }}
+        {{ form.sede.errors }}
+
+        {{ form.fecha_cita.label_tag }}
+        {{ form.fecha_cita }}
+        {{ form.fecha_cita.errors }}
+        
+        {{ form.hora_cita.label_tag }}
+        {{ form.hora_cita }}
+        {{ form.hora_cita.errors }}
+
+        <h2>2. Selecciona tu Vehículo</h2>
         {{ form.vehiculo.label_tag }}
         {{ form.vehiculo }}
         {{ form.vehiculo.errors }}
 
-        <h2>2. Elige el Tipo de Lavado</h2>
+        <h2>3. Elige el Tipo de Lavado</h2>
         {{ form.tipo_lavado.label_tag }}
         {{ form.tipo_lavado }}
         {{ form.tipo_lavado.errors }}
 
-        <h2>3. Selecciona un Empleado</h2>
-        <p>Puedes elegir un empleado específico o dejar que el sistema asigne uno por ti.</p>
+        <h2>4. Selecciona un Empleado (Opcional)</h2>
+        <p>Los empleados disponibles aparecerán al seleccionar una sede.</p>
         {{ form.empleado_asignado.label_tag }}
         {{ form.empleado_asignado }}
         {{ form.empleado_asignado.errors }}
         
-        <!-- Información adicional de los empleados -->
-        <div class="employee-info mt-3">
-            <h4>Nuestros Expertos:</h4>
-            <ul>
-            {% for empleado_profile in empleados %}
-                <li>
-                    <strong>{{ empleado_profile.user.nombre_completo }}</strong> - 
-                    Calificación: {{ empleado_profile.calificacion }}/5.00 | 
-                    Estado: {% if empleado_profile.disponible %}Disponible{% else %}Ocupado{% endif %}
-                    <br>
-                    <small>{{ empleado_profile.experiencia }}</small>
-                </li>
-            {% endfor %}
-            </ul>
+        <div id="employee-info" class="mt-3">
+            <!-- La información de los empleados se cargará aquí -->
         </div>
 
-
-        <h2>4. Productos Adicionales (Opcional)</h2>
+        <h2>5. Productos Adicionales (Opcional)</h2>
+        <!-- INICIO DEL BLOQUE CORREGIDO -->
         <div class="product-grid">
-            <div>{{ form.shampoos.label_tag }}{{ form.shampoos }}{{ form.shampoos.errors }}</div>
-            <div>{{ form.ceras.label_tag }}{{ form.ceras }}{{ form.ceras.errors }}</div>
-            <div>{{ form.siliconas.label_tag }}{{ form.siliconas }}{{ form.siliconas.errors }}</div>
-            <div>{{ form.partes_negras.label_tag }}{{ form.partes_negras }}{{ form.partes_negras.errors }}</div>
-            <div>{{ form.cuidado_pintura.label_tag }}{{ form.cuidado_pintura }}{{ form.cuidado_pintura.errors }}</div>
+            <div>
+                {{ form.shampoos.label_tag }}
+                {{ form.shampoos }}
+                {{ form.shampoos.errors }}
+            </div>
+            <div>
+                {{ form.ceras.label_tag }}
+                {{ form.ceras }}
+                {{ form.ceras.errors }}
+            </div>
+            <div>
+                {{ form.siliconas.label_tag }}
+                {{ form.siliconas }}
+                {{ form.siliconas.errors }}
+            </div>
+            <div>
+                {{ form.partes_negras.label_tag }}
+                {{ form.partes_negras }}
+                {{ form.partes_negras.errors }}
+            </div>
+            <div>
+                {{ form.cuidado_pintura.label_tag }}
+                {{ form.cuidado_pintura }}
+                {{ form.cuidado_pintura.errors }}
+            </div>
         </div>
+        <!-- FIN DEL BLOQUE CORREGIDO -->
 
         <button type="submit" class="btn btn-success mt-4">Confirmar y Reservar</button>
     </form>
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sedeSelect = document.getElementById('id_sede');
+    const empleadoSelect = document.getElementById('id_empleado_asignado');
+    const employeeInfoDiv = document.getElementById('employee-info');
+
+    sedeSelect.addEventListener('change', function() {
+        const sedeId = this.value;
+        empleadoSelect.innerHTML = '<option value="">Selección automática</option>';
+        employeeInfoDiv.innerHTML = '';
+
+        if (!sedeId) {
+            return;
+        }
+
+        fetch(`/reservas/api/get-empleados/?sede_id=${sedeId}`)
+            .then(response => response.json())
+            .then(data => {
+                let infoHtml = '<h4>Nuestros Expertos en esta Sede:</h4><ul>';
+                data.forEach(empleado => {
+                    const option = new Option(`${empleado.nombre}`, empleado.id);
+                    empleadoSelect.add(option);
+                    
+                    infoHtml += `
+                        <li>
+                            <strong>${empleado.nombre}</strong> - 
+                            Calificación: ${empleado.calificacion}/5.00
+                            <br>
+                            <small>${empleado.experiencia}</small>
+                        </li>`;
+                });
+                infoHtml += '</ul>';
+                employeeInfoDiv.innerHTML = infoHtml;
+            });
+    });
+});
+</script>
 {% endblock %}
