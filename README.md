@@ -1,119 +1,113 @@
-Sistema de Gestión para Lavadero de Autos - "Lava2"
-![Django](https://img.shields
+Sistema de Gestión para Lavadero de Autos - Lava2
+Lava2 es una aplicación web desarrollada con Django, diseñada para ser un sistema integral de gestión para un lavadero de autos. Permite manejar clientes, empleados y administradores, cada uno con su propio panel y funcionalidades específicas. El proyecto está construido siguiendo las mejores prácticas de Django, con una arquitectura modular y escalable.
 
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-3
+Características Principales
+Sistema de Autenticación Personalizado: Manejo de registro, inicio y cierre de sesión.
 
-Este repositorio contiene el código fuente de "Lava2", una aplicación web construida con Django para la gestión integral de un lavadero de autos. El proyecto ha evolucionado desde un esqueleto de autenticación básico hasta un sistema con gestión de roles, paneles de control personalizados y una estructura robusta y escalable.
+Gestión de Roles: Tres roles de usuario predefinidos: admin, employee y client.
 
-✨ Características Principales
-Sistema de Autenticación por Roles:
+Redirección Dinámica por Rol: Cada usuario es dirigido a un panel de control (dashboard) específico según su rol después de iniciar sesión.
 
-Tres roles de usuario definidos: Administrador, Empleado y Cliente.
+Registro de Clientes y Vehículos: Los nuevos clientes se registran junto con su primer vehículo.
 
-Modelo de usuario (CustomUser) extendido para incluir datos específicos como documento_identidad, nombre_completo y rol.
+Panel de Administración Personalizado: Panel de Django (/admin/) configurado para gestionar usuarios y sus campos personalizados.
 
-Paneles de Control (Dashboards) por Rol:
+Módulo de Reservas para Clientes:
 
-Redirección automática después del login a un panel de control específico según el rol del usuario.
+Los clientes pueden agendar un servicio de lavado desde su panel.
 
-Vistas separadas y protegidas para cada tipo de usuario.
+Selección de vehículo, tipo de lavado (con precios), y productos adicionales opcionales.
 
-Registro de Clientes y Vehículos:
+Posibilidad de elegir un empleado específico (mostrando su calificación y experiencia) o permitir que el sistema asigne uno automáticamente.
 
-Formulario de registro público diseñado exclusivamente para que los Clientes creen su cuenta y registren su primer vehículo.
+Tecnologías Utilizadas
+Backend: Django
 
-Panel de Administración Completo:
+Base de Datos: PostgreSQL
 
-Gestión total de usuarios desde el panel de admin de Django, permitiendo la creación y modificación de cuentas de Administradores y Empleados internamente.
+Frontend: HTML5, CSS3 (plantillas de Django)
 
-Funcionalidades de Autenticación Estándar:
+Entorno: Python, venv
 
-Inicio de Sesión (Login) y Cierre de Sesión (Logout) seguros (vía POST).
+Instalación y Puesta en Marcha
+Sigue estos pasos para configurar el entorno de desarrollo en tu máquina local.
 
-Flujo completo de recuperación y cambio de contraseña.
-
-Base de Datos PostgreSQL: Configurado para usar PostgreSQL, una base de datos potente y lista para producción.
-
-Gestión de Secretos: Implementa un archivo .env para la gestión segura de claves y credenciales fuera del control de versiones.
-
-🚀 Cómo Empezar
-Sigue estos pasos para clonar y configurar el proyecto en tu máquina local.
-
-1. Prerrequisitos
-Python 3.8+
-
-Git
-
-PostgreSQL
-
-2. Clonar el Repositorio
+1. Clonar el Repositorio
 bash
-git clone https://github.com/TuUsuario/lava2-django.git
-cd lava2-django
-3. Configurar el Entorno Virtual
+git clone <URL-del-repositorio>
+cd lava2
+2. Configurar el Entorno Virtual
+Crear el entorno virtual:
+
 bash
-# Crear el entorno virtual
 python -m venv venv
+Activar el entorno:
 
-# Activar el entorno
-# En Windows:
-venv\Scripts\activate
-# En macOS/Linux:
+En Windows:
+
+bash
+.\venv\Scripts\activate
+En macOS/Linux:
+
+bash
 source venv/bin/activate
-4. Instalar Dependencias
+3. Instalar Dependencias
 bash
 pip install -r requirements.txt
-5. Configurar la Base de Datos y Variables de Entorno
+4. Configurar la Base de Datos y Variables de Entorno
 a. Prepara tu base de datos PostgreSQL:
 
 sql
-CREATE DATABASE lava2_db;
-CREATE USER lava2_user WITH PASSWORD 'tu_clave_segura';
-GRANT ALL PRIVILEGES ON DATABASE lava2_db TO lava2_user;
+CREATE DATABASE lava2db;
+CREATE USER lava2user WITH PASSWORD 'tu-clave-segura';
+GRANT ALL PRIVILEGES ON DATABASE lava2db TO lava2user;
 b. Crea el archivo .env:
-
 En la raíz del proyecto, crea un archivo .env y añade tu configuración.
 
 text
 # Ejemplo de archivo .env
+SECRET_KEY='tu-nueva-clave-secreta-aqui'
+DATABASE_URL='postgres://lava2user:tu-clave-segura@localhost:5432/lava2db'
+EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend' # Para desarrollo
+Nota: Se utiliza dj-database-url para simplificar la configuración de la base de datos.
 
-SECRET_KEY="tu_nueva_clave_secreta_aqui"
-
-# Configuración de la base de datos
-DATABASE_URL="postgres://lava2_user:tu_clave_segura@localhost:5432/lava2_db"
-
-# Para desarrollo, los correos se imprimen en consola.
-EMAIL_BACKEND="django.core.mail.backends.console.EmailBackend"
-(Nota: Hemos simplificado la configuración de la base de datos para usar dj-database-url con una sola variable DATABASE_URL, que es una práctica más moderna y compatible con servicios de despliegue).
-
-6. Ejecutar Migraciones y Crear Superusuario
+5. Ejecutar Migraciones y Crear Superusuario
 bash
 # Aplica las migraciones para crear las tablas en la base de datos
 python manage.py migrate
 
 # Crea un superusuario para acceder al panel de administración de Django
 python manage.py createsuperuser
-7. ¡Lanzar el Servidor!
+6. Lanzar el Servidor
 bash
 python manage.py runserver
-Ahora puedes acceder a la aplicación en http://127.0.0.1:8000/.
+¡Ahora puedes acceder a la aplicación en http://127.0.0.1:8000/!
 
-⚙️ Estructura del Proyecto
+Estructura del Proyecto
+La arquitectura del proyecto está dividida en aplicaciones modulares para una mejor organización y escalabilidad.
+
 text
-lava2-django/
-├── core/                # App principal de configuración
-├── accounts/            # App de autenticación y gestión de usuarios
-├── templates/
+lava2/
+├── core/             # App principal (settings.py, urls.py)
+├── accounts/         # App para autenticación y gestión de usuarios
+├── reservations/     # App para el sistema de reservas de lavados
+├── templates/        # Directorio global de plantillas
 │   ├── base.html
 │   ├── dashboards/
-│   │   ├── admin_dashboard.html
-│   │   ├── client_dashboard.html
-│   │   └── employee_dashboard.html
-│   └── registration/
-├── static/              # Archivos estáticos (CSS, JS, imágenes)
-├── .env
+│   └── reservations/
+├── static/           # Archivos estáticos (CSS, JS, imágenes)
+├── .env              # Variables de entorno (ignorado por Git)
 ├── manage.py
-├── requirements.txt
-└── README.md
-下一步 (Próximos Pasos)
-Con la base de la aplicación ya establecida, los siguientes pasos se centrarán en construir las funcionalidades principales de negocio, como el agendamiento de servicios, la gestión de lavados por parte de los empleados y la visualización de historiales para los clientes.
+└── requirements.txt
+
+
+Próximos Pasos
+Con la base de la aplicación y el módulo de reservas establecidos, los siguientes pasos se centrarán en enriquecer la experiencia de los usuarios:
+
+Dashboard del Cliente: Mostrar el historial de reservas (pendientes, en proceso, completadas).
+
+Dashboard del Empleado: Permitir a los empleados ver y gestionar los lavados que tienen asignados (cambiar estado, ver detalles).
+
+Notificaciones: Implementar un sistema de notificaciones por correo o en la plataforma al confirmar o finalizar una reserva.
+
+Calificaciones: Permitir que los clientes califiquen el servicio una vez completado, actualizando la calificación del empleado.

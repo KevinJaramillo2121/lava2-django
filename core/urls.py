@@ -26,6 +26,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     # Luego, incluye las URLs de autenticación por defecto de Django
     path('accounts/', include('django.contrib.auth.urls')),
+    # URLs de la app de reservas
+    path('reservas/', include('reservations.urls', namespace='reservations')),
     # Página de inicio
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

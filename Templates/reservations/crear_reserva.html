@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Nueva Reserva{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Reservar Lavado</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <h2>1. Selecciona tu Vehículo</h2>
+        {{ form.vehiculo.label_tag }}
+        {{ form.vehiculo }}
+        {{ form.vehiculo.errors }}
+
+        <h2>2. Elige el Tipo de Lavado</h2>
+        {{ form.tipo_lavado.label_tag }}
+        {{ form.tipo_lavado }}
+        {{ form.tipo_lavado.errors }}
+
+        <h2>3. Selecciona un Empleado</h2>
+        <p>Puedes elegir un empleado específico o dejar que el sistema asigne uno por ti.</p>
+        {{ form.empleado_asignado.label_tag }}
+        {{ form.empleado_asignado }}
+        {{ form.empleado_asignado.errors }}
+        
+        <!-- Información adicional de los empleados -->
+        <div class="employee-info mt-3">
+            <h4>Nuestros Expertos:</h4>
+            <ul>
+            {% for empleado_profile in empleados %}
+                <li>
+                    <strong>{{ empleado_profile.user.nombre_completo }}</strong> - 
+                    Calificación: {{ empleado_profile.calificacion }}/5.00 | 
+                    Estado: {% if empleado_profile.disponible %}Disponible{% else %}Ocupado{% endif %}
+                    <br>
+                    <small>{{ empleado_profile.experiencia }}</small>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+
+
+        <h2>4. Productos Adicionales (Opcional)</h2>
+        <div class="product-grid">
+            <div>{{ form.shampoos.label_tag }}{{ form.shampoos }}{{ form.shampoos.errors }}</div>
+            <div>{{ form.ceras.label_tag }}{{ form.ceras }}{{ form.ceras.errors }}</div>
+            <div>{{ form.siliconas.label_tag }}{{ form.siliconas }}{{ form.siliconas.errors }}</div>
+            <div>{{ form.partes_negras.label_tag }}{{ form.partes_negras }}{{ form.partes_negras.errors }}</div>
+            <div>{{ form.cuidado_pintura.label_tag }}{{ form.cuidado_pintura }}{{ form.cuidado_pintura.errors }}</div>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-4">Confirmar y Reservar</button>
+    </form>
+</div>
+{% endblock %}

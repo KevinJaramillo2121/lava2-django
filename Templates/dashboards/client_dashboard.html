@@ -1,9 +1,15 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% block title %}Mi Perfil{% endblock %}
 
 {% block content %}
 <div class="container">
     <h1>Bienvenido, {{ user.nombre_completo }}</h1>
     <p>Desde aquí puedes agendar nuevos lavados y ver el historial de tus vehículos.</p>
+
+    <!-- Botón para crear una nueva reserva -->
+    <a href="{% url 'reservations:crear_reserva' %}" class="btn btn-primary">Reservar Nuevo Lavado</a>
+
+    <!-- Aquí irá el historial de reservas en el futuro -->
 </div>
 {% endblock %}
